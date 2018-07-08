@@ -2,7 +2,7 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 
-const {app, BrowserWindow, Menu} = electron;
+const {app, BrowserWindow, Menu, ipcMain} = electron;
 
 let mainWindow;
 let addWindow;
@@ -36,7 +36,7 @@ function createAddWindow() {
     addWindow = new BrowserWindow({
         width: 300,
         height: 200,
-        title: 'Add Shooping List Item'
+        title: 'Add Shopping List Item'
     });
     // Load HTML file
     addWindow.loadURL(url.format({
@@ -47,9 +47,17 @@ function createAddWindow() {
 
     // Garbage Collection Handle
     addWindow.on('close', function() {
-        addWindow = NULL;
+        addWindow = null;
     });
 }
+
+  // Catch item:add
+  ipcMain.on('item:add', function(e, item) {
+    console.log(item);
+    
+    mainWindow.webContents.send('item:add', item);
+    addWindow.close();
+});
 
 // Create Menu template
 const mainMenuTemplate = [
@@ -63,7 +71,10 @@ const mainMenuTemplate = [
                 }
             },
             {
-                label: 'Clear Items'
+                label: 'Clear Items',
+                click(){
+                    mainWindow.webContents.send('item:clear');
+                }
             },
             {
                 label: 'Quit',
@@ -83,7 +94,7 @@ if(process.platform == 'darwin') {
 }
 
 // add dev tools items if not in production
-if(process.env.NODE_ENV != 'production') {
+if(process.env.NODE_ENV !== 'production') {
     mainMenuTemplate.push({
         label: 'Dev Tools',
         submenu:[
@@ -98,5 +109,5 @@ if(process.env.NODE_ENV != 'production') {
                 role: 'reload'
             }
         ]
-    })
+    });
 }

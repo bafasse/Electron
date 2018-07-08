@@ -1,14 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Shopping List</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
 </head>
 <body>
     <h1>Shopping List</h1>
+    <ul></ul>
+
+    <script>
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+        const ul = document.querySelector('ul');
+
+        // Add item
+        // THIS DOES NOT WORK
+        ipcRenderer.on('item:add', function(e, item){
+            const li = document.createElement('li');
+            const itemText = document.createTextNode(item);
+            li.appendChild(itemText);
+            ul.appendChild(li);
+        });
+
+        // Clear item
+        ipcRenderer.on('item:add', function(e){
+            ul.innerHTML = '';
+        });
+    </script>
 </body>
 </html>
