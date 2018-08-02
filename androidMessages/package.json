@@ -1,0 +1,14 @@
+{
+  "name": "android-messages",
+  "version": "1.0.0",
+  "description": "Electron app for Android Messages",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Blake Fasse",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^2.0.5"
+  }
+}
